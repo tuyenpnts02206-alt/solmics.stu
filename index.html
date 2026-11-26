@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn Tập Vật Lí 11 - Học Kì I | Dashboard Luyện Thi & Giải Chi Tiết</title>
+  
+  <!-- Prevent theme flicker -->
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem('vl11_theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Tailwind CSS with Dark Mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            slate: {
+              750: '#293548',
+              850: '#172033',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- KaTeX for Math Expressions -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.5rem 0;
+    }
+    /* KaTeX text visibility in dark mode */
+    .dark .katex {
+      color: #e2e8f0;
+    }
+    .dark .katex .mord, .dark .katex .mbin, .dark .katex .mrel, .dark .katex .mopen, .dark .katex .mclose, .dark .katex .mpunct {
+      color: inherit;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- HEADER -->
+  <header class="bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-xs backdrop-blur-md transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div id="subjectIconContainer" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center text-xl shadow-md transition-all">
+          <i id="subjectIcon" class="fas fa-atom"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="headerTitle" class="text-lg md:text-xl font-bold text-slate-900 dark:text-white tracking-tight">Ôn Tập Vật Lí 11 - HKI</h1>
+            <span id="headerBadge" class="hidden sm:inline-flex px-2 py-0.5 text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 rounded-md border border-indigo-200 dark:border-indigo-800">
+              Chuẩn GDPT 2018
+            </span>
+          </div>
+          <p id="headerSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Đề cương ôn tập toàn diện: Dao động & Sóng cơ (84 câu hỏi kèm lời giải chi tiết)</p>
+        </div>
+      </div>
+
+      <!-- Mode Selector, Theme Toggle & Controls -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <!-- Subject Switcher Dropdown -->
+        <div class="flex items-center bg-indigo-50/80 dark:bg-slate-800/90 p-1 pl-2.5 pr-1.5 rounded-2xl border border-indigo-200/80 dark:border-slate-700 shadow-2xs">
+          <label for="subjectSelect" class="text-xs font-bold text-indigo-700 dark:text-indigo-300 mr-1.5 flex items-center gap-1 select-none">
+            <i class="fas fa-book-bookmark text-xs"></i>
+            <span class="hidden sm:inline">Môn:</span>
+          </label>
+          <select id="subjectSelect" class="bg-white dark:bg-slate-900 text-xs md:text-sm font-bold text-slate-800 dark:text-slate-100 py-1.5 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer shadow-xs">
+            <option value="vatly">⚛️ Vật Lí 11 (84 câu)</option>
+            <option value="hoahoc">🧪 Hóa Học 11 (70 câu)</option>
+            <option value="lichsu">📜 Lịch Sử 11 (76 câu)</option>
+          </select>
+        </div>
+
+        <!-- Mode Switcher -->
+        <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
+          <button id="modePracticeBtn" type="button" class="px-3.5 py-1.5 rounded-xl text-xs md:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm flex items-center gap-1.5">
+            <i class="fas fa-book-open"></i>
+            <span>Luyện tập</span>
+          </button>
+          <button id="modeExamBtn" type="button" class="px-3.5 py-1.5 rounded-xl text-xs md:text-sm font-semibold transition bg-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1.5">
+            <i class="fas fa-stopwatch"></i>
+            <span>Thi thử</span>
+          </button>
+        </div>
+
+        <!-- Timer Box (Hidden in practice mode) -->
+        <div id="timerBox" class="hidden items-center gap-2 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 px-3 py-1 rounded-xl">
+          <i class="fas fa-clock text-rose-500 text-sm"></i>
+          <span id="timerDisplay" class="font-mono text-base font-bold text-rose-700 dark:text-rose-400">50:00</span>
+        </div>
+
+        <!-- Submit Exam Button -->
+        <button id="examSubmitBtn" type="button" class="hidden px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition active:scale-95">
+          <i class="fas fa-paper-plane mr-1.5"></i> Nộp bài
+        </button>
+
+        <!-- Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" type="button" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-amber-400 transition" title="Chuyển chế độ Sáng / Tối">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:inline"></i>
+        </button>
+
+        <!-- Reset Button -->
+        <button id="resetBtn" type="button" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition" title="Làm lại từ đầu">
+          <i class="fas fa-rotate-left"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- METRICS DASHBOARD CARDS -->
+    <section class="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-6">
+      
+      <!-- Score Card -->
+      <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl p-4 md:p-5 text-white shadow-sm relative overflow-hidden flex flex-col justify-between">
+        <div class="relative z-10">
+          <div class="flex items-center justify-between text-indigo-100 text-xs font-medium mb-1">
+            <span>ĐIỂM SỐ (THANG 10)</span>
+            <i class="fas fa-award text-base opacity-80"></i>
+          </div>
+          <div class="text-3xl md:text-4xl font-extrabold tracking-tight mt-1" id="statScore">0.00</div>
+        </div>
+        <div class="relative z-10 text-[11px] text-indigo-100 mt-2 flex items-center gap-1">
+          <i class="fas fa-calculator text-[10px]"></i>
+          <span>Thang điểm Bộ GD&ĐT (Tối đa 10 đ)</span>
+        </div>
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+      </div>
+
+      <!-- Correct Answers -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between transition-colors">
+        <div>
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">
+            <span>CÂU ĐÚNG</span>
+            <span class="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+          <div class="text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400" id="statCorrect">0</div>
+        </div>
+        <div class="text-[11px] text-slate-400 dark:text-slate-500 mt-2">Câu trả lời chính xác hoàn toàn</div>
+      </div>
+
+      <!-- Mistakes Tracker (Clickable to filter) -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between cursor-pointer hover:border-rose-300 dark:hover:border-rose-600 transition group" onclick="document.querySelector('.filter-tab[data-filter=\'wrong\']').click()">
+        <div>
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">
+            <span>CÂU SAI (CẦN ÔN LẠI)</span>
+            <span class="w-6 h-6 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xs group-hover:scale-110 transition">
+              <i class="fas fa-times"></i>
+            </span>
+          </div>
+          <div class="text-2xl md:text-3xl font-bold text-rose-600 dark:text-rose-400" id="statWrong">0</div>
+        </div>
+        <div class="text-[11px] text-rose-600 dark:text-rose-400 font-medium mt-2 flex items-center gap-1">
+          <i class="fas fa-arrow-right text-[10px]"></i>
+          <span>Bấm để lọc xem câu sai</span>
+        </div>
+      </div>
+
+      <!-- Unanswered -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between transition-colors">
+        <div>
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">
+            <span>CHƯA LÀM</span>
+            <span class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center text-xs">
+              <i class="fas fa-hourglass-half"></i>
+            </span>
+          </div>
+          <div class="text-2xl md:text-3xl font-bold text-slate-700 dark:text-slate-200" id="statUnanswered">84</div>
+        </div>
+        <div class="text-[11px] text-slate-400 dark:text-slate-500 mt-2">Tổng số 84 câu trong đề cương</div>
+      </div>
+
+      <!-- Completion Progress -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between transition-colors">
+        <div>
+          <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">
+            <span>TIẾN ĐỘ HOÀN THÀNH</span>
+            <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs">
+              <i class="fas fa-chart-line"></i>
+            </span>
+          </div>
+          <div class="text-2xl md:text-3xl font-bold text-indigo-600 dark:text-indigo-400" id="statCompletion">0%</div>
+        </div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-2 overflow-hidden">
+          <div id="completionBar" class="bg-indigo-600 dark:bg-indigo-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PERFORMANCE CHARTS (Collapsible toggle) -->
+    <details class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs mb-6 overflow-hidden group transition-colors">
+      <summary class="px-5 py-3.5 cursor-pointer font-semibold text-sm text-slate-700 dark:text-slate-200 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/60 select-none">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-chart-pie text-indigo-600 dark:text-indigo-400"></i>
+          <span>Biểu đồ phân tích độ chính xác & tiến độ theo từng phần (Bấm để xem)</span>
+        </div>
+        <i class="fas fa-chevron-down text-xs text-slate-400 dark:text-slate-500 group-open:rotate-180 transition-transform"></i>
+      </summary>
+      <div class="p-5 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 dark:bg-slate-950/50">
+        <div class="bg-white dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-750 flex flex-col items-center">
+          <h4 class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase mb-3">Tỷ lệ Trả lời Toàn bộ Đề cương</h4>
+          <div class="w-full h-48 relative">
+            <canvas id="chartAccuracy"></canvas>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-750 flex flex-col items-center">
+          <h4 class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase mb-3">Số câu Đúng / Sai theo từng Phần</h4>
+          <div class="w-full h-48 relative">
+            <canvas id="chartPartProgress"></canvas>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- CONTENT BODY: 2 COLUMNS (Question stream + Sticky Sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- MAIN QUESTION STREAM (Col 8) -->
+      <div class="lg:col-span-8 flex flex-col">
+        
+        <!-- Filter Tabs & Search Bar -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 shadow-xs mb-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 transition-colors">
+          <!-- Filter Tabs (Flex-wrap so every tab is always visible) -->
+          <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+            <button type="button" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap bg-indigo-600 text-white shadow-sm" data-filter="all">
+              Tất cả (<span id="countAll">84</span>)
+            </button>
+            <button type="button" id="tabPart1Btn" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-filter="part1">
+              <span id="tabPart1Label">Phần I: TN (54)</span>
+            </button>
+            <button type="button" id="tabPart2Btn" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-filter="part2">
+              <span id="tabPart2Label">Phần II: Đ/S (12)</span>
+            </button>
+            <button type="button" id="tabPart3Btn" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-filter="part3">
+              <span id="tabPart3Label">Phần III: Ngắn (18)</span>
+            </button>
+            <button type="button" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-900/60" data-filter="wrong">
+              <i class="fas fa-times-circle mr-1"></i> Câu sai (<span id="countWrong">0</span>)
+            </button>
+            <button type="button" class="filter-tab px-3 py-2 rounded-xl transition whitespace-nowrap text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-900/60" data-filter="bookmarked">
+              <i class="fas fa-bookmark mr-1"></i> Đánh dấu (<span id="countBookmark">0</span>)
+            </button>
+          </div>
+
+          <!-- Search Box -->
+          <div class="relative min-w-[180px]">
+            <i class="fas fa-search absolute left-3 top-2.5 text-xs text-slate-400 dark:text-slate-500"></i>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm câu hỏi..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+          </div>
+        </div>
+
+        <!-- Questions Container (Cards dynamically injected here) -->
+        <div id="questionsContainer" class="flex flex-col"></div>
+
+      </div>
+
+      <!-- STICKY SIDEBAR: QUESTION MAP (Col 4) -->
+      <aside class="lg:col-span-4 sticky top-20">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex flex-col max-h-[calc(100vh-6.5rem)] overflow-y-auto custom-scrollbar transition-colors">
+          
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <i class="fas fa-th-large text-indigo-600 dark:text-indigo-400"></i>
+              <span>Mục lục câu hỏi</span>
+            </h3>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold">84 câu</span>
+          </div>
+
+          <!-- Legend -->
+          <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-500 dark:text-slate-400 mb-4 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span> Chưa làm</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-indigo-600"></span> Đã chọn</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Đúng</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500"></span> Sai</div>
+          </div>
+
+          <!-- Part 1 Grid -->
+          <div class="mb-4">
+            <div class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center justify-between">
+              <span id="sidebarPart1Title">Phần I: Trắc nghiệm (54 câu)</span>
+              <span id="sidebarPart1Range" class="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold">1 - 54</span>
+            </div>
+            <div id="navGridPart1" class="grid grid-cols-6 sm:grid-cols-9 lg:grid-cols-6 xl:grid-cols-7 gap-1.5"></div>
+          </div>
+
+          <!-- Part 2 Grid -->
+          <div class="mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center justify-between">
+              <span id="sidebarPart2Title">Phần II: Đúng / Sai (12 câu)</span>
+              <span id="sidebarPart2Range" class="text-[10px] text-violet-600 dark:text-violet-400 font-semibold">1 - 12</span>
+            </div>
+            <div id="navGridPart2" class="grid grid-cols-6 sm:grid-cols-9 lg:grid-cols-6 gap-1.5"></div>
+          </div>
+
+          <!-- Part 3 Grid -->
+          <div id="sidebarPart3Container" class="pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center justify-between">
+              <span id="sidebarPart3Title">Phần III: Trả lời ngắn (18 câu)</span>
+              <span id="sidebarPart3Range" class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold">1 - 18</span>
+            </div>
+            <div id="navGridPart3" class="grid grid-cols-6 sm:grid-cols-9 lg:grid-cols-6 gap-1.5"></div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- EXAM RESULT MODAL -->
+  <div id="resultModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-emerald-400 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Kết Quả Bài Thi Thử</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="modalSubjectSubtitle">Đề Cương Ôn Tập Học Kì I - Môn Vật Lí Lớp 11</p>
+      </div>
+
+      <!-- Score Box -->
+      <div class="bg-gradient-to-r from-indigo-50 to-violet-50 dark:from-indigo-950/60 dark:to-violet-950/60 rounded-2xl p-4 text-center border border-indigo-100 dark:border-indigo-900/80 mb-5">
+        <div class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-wide">Điểm Quy Đổi Thang 10</div>
+        <div class="text-5xl font-black text-indigo-600 dark:text-indigo-400 my-1" id="modalScore">0.00</div>
+        <div class="text-xs text-slate-600 dark:text-slate-300">Tổng điểm gốc: <strong id="modalRawPoints" class="dark:text-white">0 / 30.0 đ</strong></div>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="grid grid-cols-2 gap-3 mb-5 text-sm">
+        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-xl border border-emerald-200 dark:border-emerald-800/80 flex items-center justify-between">
+          <span class="text-emerald-800 dark:text-emerald-300 font-medium"><i class="fas fa-check-circle mr-1"></i> Số câu đúng:</span>
+          <strong class="text-emerald-900 dark:text-emerald-200" id="modalCorrect">0 câu</strong>
+        </div>
+        <div class="p-3 bg-rose-50 dark:bg-rose-950/50 rounded-xl border border-rose-200 dark:border-rose-800/80 flex items-center justify-between">
+          <span class="text-rose-800 dark:text-rose-300 font-medium"><i class="fas fa-times-circle mr-1"></i> Số câu sai:</span>
+          <strong class="text-rose-900 dark:text-rose-200" id="modalWrong">0 câu</strong>
+        </div>
+      </div>
+
+      <!-- Detailed Breakdown -->
+      <div class="space-y-2 mb-6 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+        <div class="flex justify-between">
+          <span>Phần I (Trắc nghiệm nhiều lựa chọn):</span>
+          <strong class="text-slate-800 dark:text-slate-100" id="modalP1Stats">0/54 câu (0 đ)</strong>
+        </div>
+        <div class="flex justify-between">
+          <span>Phần II (Trắc nghiệm Đúng / Sai):</span>
+          <strong class="text-slate-800 dark:text-slate-100" id="modalP2Stats">0/12 câu (0 đ)</strong>
+        </div>
+        <div class="flex justify-between" id="modalP3Row">
+          <span>Phần III (Trắc nghiệm Trả lời ngắn):</span>
+          <strong class="text-slate-800 dark:text-slate-100" id="modalP3Stats">0/18 câu (0 đ)</strong>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button id="reviewWrongInModalBtn" type="button" class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition flex items-center justify-center gap-2">
+          <i class="fas fa-times-circle"></i> Xem lại các câu làm sai
+        </button>
+        <button id="closeModalBtn" type="button" class="py-3 px-5 rounded-xl font-semibold text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">
+          Đóng
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-4 mt-8 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+      Solmics Student Portal • Nền tảng ôn tập kiến thức & luyện thi THPT Học kì I (Vật lí, Hóa học, Lịch sử) • Tự động tính điểm, lưu tiến độ & giải thích chi tiết.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="questionsData.js"></script>
+  <script src="chemistryData.js"></script>
+  <script src="historyData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
